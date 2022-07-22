@@ -42,7 +42,7 @@ class AppTestCase(unittest.TestCase):
         timeline_response = self.client.get('/timeline')
         assert timeline_response.status_code == 200
         html = timeline_response.get_data(as_text=True)
-        assert "<h2>Welcome to My Timeline Page</h2>" in html 
+        assert "My Timeline Page</h2>" in html 
 
     def test_malformed_timeline_post(self): 
         # POST request missing name 
