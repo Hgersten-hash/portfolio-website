@@ -29,5 +29,5 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       
       - name: Deploy Site
-        run: ssh my-vps '~/redeploy-site.sh'
+        run: ssh my-vps '~/redeploy-site.sh && cd ${{ secrets.PROJECT_ROOT }} && docker compose ps'
           
