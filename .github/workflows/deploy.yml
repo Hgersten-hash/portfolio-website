@@ -29,5 +29,11 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       
       - name: Deploy Site
-        run: ssh my-vps '~/redeploy-site.sh && cd ${{ secrets.PROJECT_ROOT }} && docker compose ps'
+        run: ssh my-vps '~/redeploy-site.sh'
+      
+      - name: Print Container Status
+        run: 'cd ${{ secrets.PROJECT_ROOT }} && docker compose ps'
+        
+      - name: Send Discord MSG
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
           
