@@ -56,7 +56,32 @@ jobs:
       
       - name: Print Container Status
         run: ssh my-vps 'cd ${{ secrets.PROJECT_ROOT }} && docker compose ps'
+  
+  notify-job-failure:
+    runs-on: ubuntu-latest
+    needs: [test, deploy]
+    if: ${{ always() && (needs.test.result == 'failure') || (needs.deploy.result == 'failure') }}
+    steps:
+      - name: Notify Failed Test
+        if: ${{ (needs.test.result == 'failure') }}
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content= 🚨 Testing Failed"
+      
+      - name: Notify Failed Deploy
+        if: ${{ (needs.deploy.result == 'failure') }}
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content= 🚨 Deployment Failed"
         
-      - name: Send Discord MSG
-        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content=🚀 Deployment Successful"
+  notify-job-success:
+    runs-on: ubuntu-latest
+    needs: [test, deploy]
+    if: ${{ always() && (needs.test.result == 'success') || (needs.deploy.result == 'success') }}
+    steps:
+      - name: Notify Failed Test
+        if: ${{ (needs.test.result == 'success') }}
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content= 🚀 Testing Successful"
+      
+      - name: Notify Failed Deploy
+        if: ${{ (needs.deploy.result == 'success') }}
+        run: curl -s -X POST "${{ secrets.DISCORD_WEBHOOK }}" -d "content= 🚀 Deployment Successful"
+        
+  
           
