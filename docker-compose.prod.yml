@@ -29,7 +29,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - nginx_secrets:/etc/letsencrypt
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
       - ./user_conf.d:/etc/nginx/user_conf.d
     depends_on:
       - myportfolio
